@@ -131,9 +131,17 @@ export default function Checkout() {
           <h3 className="text-white font-heading font-bold mb-4">Order Summary</h3>
           <div className="space-y-2 mb-4">
             {items.map((item) => (
-              <div key={item._id} className="flex justify-between text-sm">
-                <span className="text-gray-400 truncate mr-2">{item.product?.name} ×{item.quantity}</span>
-                <span className="text-white shrink-0">{formatPrice(item.priceAtAdd * item.quantity)}</span>
+              <div key={item._id} className="mb-2 last:mb-0">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400 truncate mr-2">{item.product?.name} ×{item.quantity}</span>
+                  <span className="text-white shrink-0">{formatPrice(item.priceAtAdd * item.quantity)}</span>
+                </div>
+                {(item.size || item.color) && (
+                  <div className="flex gap-2 mt-0.5">
+                    {item.size && <span className="text-[9px] uppercase tracking-tighter text-gray-500">Size: {item.size}</span>}
+                    {item.color && <span className="text-[9px] uppercase tracking-tighter text-gray-500">Color: {item.color}</span>}
+                  </div>
+                )}
               </div>
             ))}
           </div>
