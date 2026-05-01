@@ -59,6 +59,12 @@ export default function Cart() {
                 <Link to={`/product/${item.product?._id}`} className="text-white font-medium text-sm hover:text-primary transition-colors line-clamp-2">
                   {item.product?.name}
                 </Link>
+                {(item.size || item.color) && (
+                  <div className="flex gap-2 mt-1">
+                    {item.size && <span className="text-[10px] uppercase tracking-wider bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-gray-400">Size: {item.size}</span>}
+                    {item.color && <span className="text-[10px] uppercase tracking-wider bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-gray-400">Color: {item.color}</span>}
+                  </div>
+                )}
                 <p className="text-primary font-bold mt-1">{formatPrice(item.priceAtAdd)}</p>
                 <div className="flex items-center justify-between mt-3">
                   <div className="flex items-center bg-dark-400 rounded-lg border border-white/10">

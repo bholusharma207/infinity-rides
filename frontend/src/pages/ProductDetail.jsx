@@ -16,12 +16,16 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const { data } = await api.get(`/products/${id}`);
         setProduct(data.product);
+        if (data.product.sizes?.length > 0) setSelectedSize(data.product.sizes[0]);
+        if (data.product.colors?.length > 0) setSelectedColor(data.product.colors[0]);
       } catch (err) {
         toast.error('Product not found');
       } finally {
@@ -33,8 +37,11 @@ export default function ProductDetail() {
 
   const handleAddToCart = async () => {
     if (!user) { toast.error('Please login first'); return; }
+    if (product.sizes?.length > 0 && !selectedSize) { toast.error('Please select a size'); return; }
+    if (product.colors?.length > 0 && !selectedColor) { toast.error('Please select a color'); return; }
+    
     try {
-      await addToCart(product._id, quantity);
+      await addToCart(product._id, quantity, selectedSize, selectedColor);
       toast.success('Added to cart!');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to add');
@@ -106,7 +113,17 @@ export default function ProductDetail() {
               <h4 className="text-white text-sm font-semibold mb-2">Available Sizes</h4>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((size) => (
-                  <span key={size} className="px-3 py-1.5 bg-dark-300 border border-white/10 rounded-lg text-sm text-gray-300">{size}</span>
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all border ${
+                      selectedSize === size
+                        ? 'bg-primary border-primary text-white font-bold'
+                        : 'bg-dark-300 border-white/10 text-gray-400 hover:border-white/30'
+                    }`}
+                  >
+                    {size}
+                  </button>
                 ))}
               </div>
             </div>
@@ -116,7 +133,17 @@ export default function ProductDetail() {
               <h4 className="text-white text-sm font-semibold mb-2">Available Colors</h4>
               <div className="flex flex-wrap gap-2">
                 {product.colors.map((color) => (
-                  <span key={color} className="px-3 py-1.5 bg-dark-300 border border-white/10 rounded-lg text-sm text-gray-300">{color}</span>
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all border ${
+                      selectedColor === color
+                        ? 'bg-primary border-primary text-white font-bold'
+                        : 'bg-dark-300 border-white/10 text-gray-400 hover:border-white/30'
+                    }`}
+                  >
+                    {color}
+                  </button>
                 ))}
               </div>
             </div>

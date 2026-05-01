@@ -21,7 +21,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @desc  Add item to cart
 // @route POST /api/cart
 const addToCart = asyncHandler(async (req, res) => {
-  const { productId, quantity = 1 } = req.body;
+  const { productId, quantity = 1, size, color } = req.body;
 
   const product = await Product.findById(productId);
   if (!product || !product.isActive) {
@@ -40,7 +40,10 @@ const addToCart = asyncHandler(async (req, res) => {
   }
 
   const existingIndex = cart.items.findIndex(
-    item => item.product.toString() === productId
+    item => 
+      item.product.toString() === productId && 
+      item.size === size && 
+      item.color === color
   );
 
   if (existingIndex >= 0) {
@@ -51,6 +54,8 @@ const addToCart = asyncHandler(async (req, res) => {
       product: productId,
       quantity,
       priceAtAdd: product.finalPrice,
+      size,
+      color
     });
   }
 

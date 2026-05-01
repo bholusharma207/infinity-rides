@@ -29,10 +29,10 @@ export function CartProvider({ children }) {
     fetchCart();
   }, [token]);
 
-  const addToCart = async (productId, quantity = 1) => {
+  const addToCart = async (productId, quantity = 1, size, color) => {
     try {
       setLoading(true);
-      const { data } = await api.post('/cart', { productId, quantity });
+      const { data } = await api.post('/cart', { productId, quantity, size, color });
       setCart(data.cart);
       return data.cart;
     } catch (error) {
