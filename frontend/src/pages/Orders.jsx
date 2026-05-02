@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
-import { formatPrice, getStatusColor } from '../utils/helpers';
+import { formatPrice, getStatusColor, getImageUrl } from '../utils/helpers';
 import Spinner from '../components/ui/Spinner';
 
 export default function Orders() {
@@ -51,7 +51,7 @@ export default function Orders() {
                 {order.items?.map((item, i) => (
                   <div key={i} className="flex items-center gap-2 bg-dark-400/50 rounded-lg p-2 pr-4">
                     <div className="w-10 h-10 rounded-lg overflow-hidden bg-dark-300 shrink-0">
-                      <img src={item.image?.startsWith('http') ? item.image : `http://localhost:5000${item.image}`} alt="" className="w-full h-full object-cover" />
+                      <img src={getImageUrl(item.image)} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div>
                       <p className="text-gray-300 text-xs line-clamp-1">{item.name}</p>
